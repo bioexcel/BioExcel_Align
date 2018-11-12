@@ -38,11 +38,11 @@ def bwamem_beta(arglist):
     print(arglist)
     #/anaconda/bin/bwa mem   -c 250 -M -t 15  -R '@RG\tID:SHGSOC001N\tPL:illumina\tPU:1_20180823_SHGSOC\tSM:SHGSOC001N' -v 1 /gpfs/igmmfs01/eddie/bioinfsvice/ameynert/software/bcbio-1.0.7/genomes/Hsapiens/hg38/bwa/hg38.fa align_prep/SHGSOC001N_SHGSOC001N_R1.fastq.gz align_prep/SHGSOC001N_SHGSOC001N_R2.fastq.gz | /anaconda/bin/bamsormadup inputformat=sam threads=15 tmpfile=bcbiotx/tmpMwNtCb/SHGSOC001N-sort-sorttmp-markdup SO=coordinate indexfilename=bcbiotx/tmpMwNtCb/SHGSOC001N-sort.bam.bai > bcbiotx/tmpMwNtCb/SHGSOC001N-sort.bam
 
-def samtools_index(sample):
+def samtools_index(infile):
     """
     Run samtools index on newly created, aligned bam files
     """
-    command = str('samtools index {}.raw.bam'.format(sample))
+    command = str('samtools index {}'.format(infile))
     cmdargs = shlex.split(command)
     print(command)
     print(cmdargs)
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     else: 
         sys.exit('No BWA Mem version selected')
 
-    psamidx = samtoos_index(args.sample)
+    psamidx = samtools_index('{}.raw.bam'.format(args.sample)
     psamidx.wait()
     
     

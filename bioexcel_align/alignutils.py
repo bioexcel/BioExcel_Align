@@ -85,8 +85,8 @@ def parse_command_line(description):
                     'Common arguments used when running pipeline.')
     maingroup.add_argument("-f", "--files", nargs='+', metavar=('F1'),
                             help="Either a pair of input FastQ files (BWA), or "
-                            "single BAM file (GATK). Depends on tools to run.")
-    maingroup.add_argument("-s", "--sample", default='BioExcel',
+                            "single BAM file (GATK), depending on usage.")
+    maingroup.add_argument("-s", "--sample",
                         help="Sample name to prepend to all output files.")
     maingroup.add_argument("-o", "--outdir", default='./', metavar='PATH',
                         help="Output directory. (default: current directory)")
@@ -99,11 +99,11 @@ def parse_command_line(description):
     bwagroup = parser.add_argument_group('BWA Mem/alignment stage',
         'Additional arguments used when running the BWA stage manually, e.g. '
         'with: python -m bioexcel_align.bwamem_orig <args>')
-    bwagroup.add_argument("--bwa_version", type=str, default='stable',
+    bwagroup.add_argument("--bwa_version",  default='stable',
                             choices=['stable', 'beta'],
                             help="Version of BWA Mem stage to run: Stable "
                             "or more recent, beta version")
-    bwagroup.add_argument("--bwa_ind_ref", type=str, 
+    bwagroup.add_argument("--bwa_ind_ref", 
                         default='genomes/Hsapiens/GRCh37/bwa/GRCh37.fa',
                         help="Location of the indexed reference genome file "
                         "for use with BWA")
@@ -112,12 +112,12 @@ def parse_command_line(description):
                 'Additional arguments needed when running the GATK stage '
                 'manually, e.g. with: python -m bioexcel_align.gatk_baserecal '
                 '<args>')
-    gatkgroup.add_argument("-p", "--printconfig", action='store_true',
-                        help="Print example config files to current directory.")
+    gatkgroup.add_argument("-j", "--java", metavar='J_ARGS', default=''
+                        help="Arguments passed to Java when running GATK (e.g. tmpdirs, max memory).")
 
     args = parser.parse_args()
     if not args.files:
-            sys.exit("\nusage: bioexcel_align -h for help \n\nbioexcel_align "
+        sys.exit("\nusage: bioexcel_align -h for help \n\nbioexcel_align "
                     "error: the following arguments are required: -f/--files")
 
     if args.tmpdir:
@@ -127,9 +127,14 @@ def parse_command_line(description):
     args.gatkdir = os.path.abspath("{0}/GATK_out".format(args.outdir))
     args.date = datetime.now().strftime('%Y_%m_%d')
 
+    if not args.sample: 
+        args.sample=args.date
+
     return args
 
 if __name__ == "__main__":
     description = ("This script contains a series of useful functions for the "
-                "Alignment stage of the BioExcel Cancer Genome Workflow")
+                "Alignment stage of the BioExcel Cancer Genome Workflow. Run "
+                "to print out example args.")
     args = parse_command_line(description)
+    print args
