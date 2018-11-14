@@ -10,7 +10,12 @@ import subprocess as sp
 import bioexcel_align.alignutils as au
 
 def baserecal(jopts, threads, ref, infile, dbsnp, gatkdir, sample):
-    
+    '''
+    Create and run command for GATK BaseRecalibratorSpark Local mode
+    '''
+
+    au.make_paths(gatkdir)
+
     command = str("gatk BaseRecalibratorSpark \
         --java-options {0} \
         --spark-master local[{1}] \
@@ -29,7 +34,12 @@ def baserecal(jopts, threads, ref, infile, dbsnp, gatkdir, sample):
     return p
 
 def applybqsr(jopts, threads, infile, recal, gatkdir, sample):
-    
+    '''
+    Create and run command for GATK ApplyBQSRSpark Local mode
+    '''
+
+    au.make_paths(gatkdir)
+
     command = str("gatk ApplyBQSRSpark \
     --java-options {0} \
     --spark-master local[{1}] \
@@ -52,4 +62,11 @@ if __name__ == "__main__":
 
     args.files = au.get_files(args)
 
+    pbr = baserecal(args.jvm_opts, args.threads, args.ref, args.files, 
+                                        args.dbsnp, args.gatkdir, args.sample)
+    pbr.wait()
+
+    pab = applybqsr(args.jvm_opts, args.threads, args.files, args.recal, 
+                                                    args.gatkdir, args.sample)
+    pab.wait()
     

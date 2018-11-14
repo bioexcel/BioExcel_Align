@@ -18,7 +18,5 @@ setup(
     author_email='d.white@epcc.ed.ac.uk',
     scripts=['bin/bioexcel_align'],
     packages=['bioexcel_align'],
-    package_dir={'bioexcel_align': 'bioexcel_align'},
-    # install_requires=['pyyaml'],
-    # data_files=[('bioexcel_align', ['data/checkQC.yml'])],
+    package_dir={'bioexcel_align': 'bioexcel_align'}
 )

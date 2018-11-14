@@ -13,14 +13,17 @@ def bwamem_stable(bwa_ref, threads, date, sample, fqfiles, bwadir):
     """
     Create and run process for the original implementation of BWA-Mem alignment
     """
-    command = str('bwa mem {0} -t {1} -M '
-            '-R "@RG\tID:{2}\tPL:illumina\tPU:{2}\tSM:{3}" {4} | samblaster '
+
+    au.make_paths(bwadir)
+
+    command = str('bwa mem -R "@RG\tID:{0}\tPL:illumina\tPU:{0}\tSM:{1}" '
+            ' -t {2} -M {3} {4} | samblaster '
             '--splitterFile >(samtools view -hSu /dev/stdin | samtools sort '
-            '-@ {1} /dev/stdin > {5}/{3}.sr.bam) --discordantFile >(samtools '
-            'view -hSu /dev/stdin | samtools sort -@ {1} /dev/stdin > '
-            '{5}/{3}.disc.bam) | samtools view -hSu /dev/stdin | samtools '
-            'sort -@ {1} /dev/stdin > {5}/{3}.raw.bam'.format(bwa_ref, 
-            threads, date, sample, ' '.join(fqfiles), bwadir))
+            '-@ {2} /dev/stdin > {5}/{1}.sr.bam) --discordantFile >(samtools '
+            'view -hSu /dev/stdin | samtools sort -@ {2} /dev/stdin > '
+            '{5}/{1}.disc.bam) | samtools view -hSu /dev/stdin | samtools '
+            'sort -@ {2} /dev/stdin > {5}/{1}.raw.bam'.format(date, sample, 
+                                threads, bwa_ref, ' '.join(fqfiles), bwadir))
 
     cmdargs = shlex.split(command)
     print(command)
@@ -65,7 +68,7 @@ if __name__ == "__main__":
     else: 
         sys.exit('No BWA Mem version selected')
 
-    psamidx = samtools_index('{}.raw.bam'.format(args.sample)
+    psamidx = samtools_index('{}.raw.bam'.format(args.sample))
     psamidx.wait()
     
     

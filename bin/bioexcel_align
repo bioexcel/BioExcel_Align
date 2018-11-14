@@ -15,19 +15,26 @@ if __name__ == "__main__":
     description = ("This script performs the Alignment step of the Cancer "
                         "Genome Variant pipeline.")
 
-    args = sqcu.parse_command_line(description)
+    args = au.parse_command_line(description)
 
-    args = make_paths(args)
-    args.files = get_files(args)
-    args.threads = get_threads(args)
+    if args.bwa_version == 'stable':
+        print("Hi")
+        pbwa = rb.bwamem_stable(args.bwa_ind_ref, args.threads, args.date,                 args.sample, args.files, args.bwadir)
+        pbwa.wait()
+    # elif args.bwa_version == 'beta':
+    #     pbwa = bwamem_beta(args.bwa_ind_ref, args.threads, args.date, 
+    #               args.sample, args.fqfiles, args.bwadir)
+    #     pbwa.wait()
 
-    ### Run FastQC
-    prm = rm.run_main(args)
-    prm.wait()
+    else: 
+        sys.exit('No BWA Mem version selected')
 
-    prg = rg.run_gatk(args)
-    prg.wait()
-    ### Check FastQC output, simple yes/no to quality trimming
-    ### Output and resubmission of jobs handled by checkFastQC
-    prq = rq.run_qc(args)
-    prq.wait()
+    psamidx = rb.samtools_index('{}.raw.bam'.format(args.sample))
+    psamidx.wait()
+
+    pbr = rg.baserecal(args.jvm_opts, args.threads, args.ref, args.files,                                           args.dbsnp, args.gatkdir, args.sample)
+    pbr.wait()
+
+    pab = rg.applybqsr(args.jvm_opts, args.threads, args.files, args.recal, 
+                                                    args.gatkdir, args.sample)
+    pab.wait()

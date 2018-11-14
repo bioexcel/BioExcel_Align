@@ -11,7 +11,6 @@ import argparse
 from argparse import HelpFormatter
 from datetime import datetime
 import shutil
-import yaml
 
 class MyFormatter(HelpFormatter):
     """
@@ -97,8 +96,7 @@ def parse_command_line(description):
                         "stages use all threads. (default: 2)")
     ####
     bwagroup = parser.add_argument_group('BWA Mem/alignment stage',
-        'Additional arguments used when running the BWA stage manually, e.g. '
-        'with: python -m bioexcel_align.bwamem_orig <args>')
+        'Additional arguments used when running the BWA stage manually')
     bwagroup.add_argument("--bwa_version",  default='stable',
                             choices=['stable', 'beta'],
                             help="Version of BWA Mem stage to run: Stable "
@@ -109,14 +107,19 @@ def parse_command_line(description):
                         "for use with BWA")
     ####
     gatkgroup = parser.add_argument_group('GATK stages',
-                'Additional arguments needed when running the GATK stage '
-                'manually, e.g. with: python -m bioexcel_align.gatk_baserecal '
-                '<args>')
-    gatkgroup.add_argument("-j", "--java", metavar='J_ARGS', default=''
-                        help="Arguments passed to Java when running GATK (e.g. tmpdirs, max memory).")
+                'Additional arguments needed when running the GATK stage ')
+    gatkgroup.add_argument("-j", "--jvm_opts", metavar='J_ARGS', default='',
+                help="Arguments passed to Java when running GATK (e.g. max "
+                "memory, tmpdirs).")
+    gatkgroup.add_argument("-r", "--ref", metavar='FILE', 
+                default='genomes/Hsapiens/GRCh37/seq/GRCh37.2bit',
+                help="Reference sequence file.")  
+    gatkgroup.add_argument("-k", "--knownsites", metavar='FILE', 
+                default='genomes/Hsapiens/GRCh37/variation/dbsnp-147.vcf.gz',
+                help="One or more databases of known polymorphic sites.")              
 
     args = parser.parse_args()
-    if not args.files:
+    if not args.files and __name__ != "__main__":
         sys.exit("\nusage: bioexcel_align -h for help \n\nbioexcel_align "
                     "error: the following arguments are required: -f/--files")
 
@@ -125,16 +128,40 @@ def parse_command_line(description):
     args.outdir = os.path.abspath(args.outdir)
     args.bwadir = os.path.abspath("{0}/BWA_out".format(args.outdir))
     args.gatkdir = os.path.abspath("{0}/GATK_out".format(args.outdir))
+    
     args.date = datetime.now().strftime('%Y_%m_%d')
-
+    args.files = get_files(args.files)
     if not args.sample: 
         args.sample=args.date
 
     return args
+
+def make_paths(dirpath):
+    """
+    Create paths required for run of SeqQC pipeline
+    """
+    if not os.path.exists(dirpath):
+        os.makedirs(dirpath, exist_ok=True)
+
+    return
+
+def get_files(filelist):
+    """
+    Return list of files to pass through SeqQC pipeline, throws error
+    """
+
+    # make sure files exist
+    for checkfile in filelist:
+        if not os.path.isfile(checkfile):
+            sys.exit("Error: Input file {} does not exist.".format(checkfile))
+    # expand paths to files (now we know the all exist)
+    infiles = [os.path.abspath(x) for x in filelist]
+    return infiles
 
 if __name__ == "__main__":
     description = ("This script contains a series of useful functions for the "
                 "Alignment stage of the BioExcel Cancer Genome Workflow. Run "
                 "to print out example args.")
     args = parse_command_line(description)
-    print args
+    print(args)
+    make_paths('blah')
