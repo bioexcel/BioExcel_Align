@@ -16,6 +16,8 @@ def bwamem_stable(bwa_ref, threads, date, sample, fqfiles, bwadir):
 
     au.make_paths(bwadir)
 
+    # Future: Split this across several processes properly. Shell=True is not
+    # safe.
     command = str('bwa mem -R "@RG\tID:{0}\tPL:illumina\tPU:{0}\tSM:{1}" '
             ' -t {2} -M {3} {4} | samblaster '
             '--splitterFile >(samtools view -hSu /dev/stdin | samtools sort '
@@ -25,11 +27,11 @@ def bwamem_stable(bwa_ref, threads, date, sample, fqfiles, bwadir):
             'sort -@ {2} /dev/stdin > {5}/{1}.raw.bam'.format(date, sample, 
                                 threads, bwa_ref, ' '.join(fqfiles), bwadir))
 
-    cmdargs = shlex.split(command)
+    # cmdargs = shlex.split(command)
     print(command)
-    print(cmdargs)
+    # print(cmdargs)
 
-    p = sp.Popen(cmdargs)
+    p = sp.Popen(command, shell=True)
 
     return p
 

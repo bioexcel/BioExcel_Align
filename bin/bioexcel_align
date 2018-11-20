@@ -9,6 +9,7 @@ each step.
 import bioexcel_align.runbwa as rb
 import bioexcel_align.rungatk as rg
 import bioexcel_align.alignutils as au
+import sys
 
 if __name__ == "__main__":
 
@@ -18,8 +19,8 @@ if __name__ == "__main__":
     args = au.parse_command_line(description)
 
     if args.bwa_version == 'stable':
-        print("Hi")
-        pbwa = rb.bwamem_stable(args.bwa_ind_ref, args.threads, args.date,                 args.sample, args.files, args.bwadir)
+        pbwa = rb.bwamem_stable(args.bwa_ind_ref, args.threads, args.date,
+                                       args.sample, args.files, args.bwadir)
         pbwa.wait()
     # elif args.bwa_version == 'beta':
     #     pbwa = bwamem_beta(args.bwa_ind_ref, args.threads, args.date, 
@@ -32,9 +33,10 @@ if __name__ == "__main__":
     psamidx = rb.samtools_index('{}.raw.bam'.format(args.sample))
     psamidx.wait()
 
-    pbr = rg.baserecal(args.jvm_opts, args.threads, args.ref, args.files,                                           args.dbsnp, args.gatkdir, args.sample)
+    pbr = rg.baserecal(args.jvm_opts, args.threads, args.ref, args.files,
+                                    args.knownsites, args.gatkdir, args.sample)
     pbr.wait()
 
-    pab = rg.applybqsr(args.jvm_opts, args.threads, args.files, args.recal, 
+    pab = rg.applybqsr(args.jvm_opts, args.threads, args.files, args.recal,
                                                     args.gatkdir, args.sample)
     pab.wait()
