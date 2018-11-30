@@ -75,7 +75,7 @@ def parse_command_line(description):
     """
     Parser of command line arguments for BioExcel_Align
     """
-    formatter_class=lambda prog: MyFormatter(prog, max_help_position=40,
+    formatter_class = lambda prog: MyFormatter(prog, max_help_position=40,
                                                     width=80)
     parser = argparse.ArgumentParser(description=description,
                                     formatter_class=formatter_class)
@@ -164,4 +164,4 @@ if __name__ == "__main__":
                 "to print out example args.")
     args = parse_command_line(description)
     print(args)
-    make_paths('blah')
+    

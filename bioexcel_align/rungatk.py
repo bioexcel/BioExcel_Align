@@ -9,7 +9,7 @@ import shlex
 import subprocess as sp
 import bioexcel_align.alignutils as au
 
-def baserecal(jopts, threads, ref, infile, dbsnp, gatkdir, sample):
+def baserecal(jopts, threads, ref, infile, knownsites, gatkdir, sample):
     '''
     Create and run command for GATK BaseRecalibratorSpark Local mode
     '''
@@ -22,7 +22,7 @@ def baserecal(jopts, threads, ref, infile, dbsnp, gatkdir, sample):
         -R {2} \
         -I {3} \
         --known-sites {4} \
-        -O {5}/{6}.recal.table".format(jopts, threads, ref, infile, dbsnp,
+        -O {5}/{6}.recal.table".format(jopts, threads, ref, infile, knownsites,
                             gatkdir, sample))
 
     cmdargs = shlex.split(command)
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     args.files = au.get_files(args)
 
     pbr = baserecal(args.jvm_opts, args.threads, args.ref, args.files, 
-                                        args.dbsnp, args.gatkdir, args.sample)
+                                        args.knownsites, args.gatkdir, args.sample)
     pbr.wait()
 
     pab = applybqsr(args.jvm_opts, args.threads, args.files, args.recal, 
