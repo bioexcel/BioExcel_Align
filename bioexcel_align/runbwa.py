@@ -31,7 +31,7 @@ def bwamem_stable(bwa_ref, threads, date, sample, fqfiles, bwadir):
     print(command)
     # print(cmdargs)
 
-    p = sp.Popen(command, shell=True)
+    p = sp.Popen(command, shell=True, executable='/bin/bash')
 
     return p
 
