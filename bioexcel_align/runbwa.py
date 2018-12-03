@@ -18,7 +18,7 @@ def bwamem_stable(bwa_ref, threads, date, sample, fqfiles, bwadir):
 
     # Future: Split this across several processes properly. Shell=True is not
     # safe.
-    command = str('bwa mem -R "@RG\tID:{0}\tPL:illumina\tPU:{0}\tSM:{1}" '
+    command = str('bwa mem -R "@RG\\tID:{0}\\tPL:illumina\\tPU:{0}\\tSM:{1}" '
             ' -t {2} -M {3} {4} | samblaster '
             '--splitterFile >(samtools view -hSu /dev/stdin | samtools sort '
             '-@ {2} /dev/stdin > {5}/{1}.sr.bam) --discordantFile >(samtools '
@@ -41,7 +41,7 @@ def bwamem_beta(arglist):
     """
     print("Hello!")
     print(arglist)
-    #/anaconda/bin/bwa mem   -c 250 -M -t 15  -R '@RG\tID:SHGSOC001N\tPL:illumina\tPU:1_20180823_SHGSOC\tSM:SHGSOC001N' -v 1 /gpfs/igmmfs01/eddie/bioinfsvice/ameynert/software/bcbio-1.0.7/genomes/Hsapiens/hg38/bwa/hg38.fa align_prep/SHGSOC001N_SHGSOC001N_R1.fastq.gz align_prep/SHGSOC001N_SHGSOC001N_R2.fastq.gz | /anaconda/bin/bamsormadup inputformat=sam threads=15 tmpfile=bcbiotx/tmpMwNtCb/SHGSOC001N-sort-sorttmp-markdup SO=coordinate indexfilename=bcbiotx/tmpMwNtCb/SHGSOC001N-sort.bam.bai > bcbiotx/tmpMwNtCb/SHGSOC001N-sort.bam
+    #/anaconda/bin/bwa mem   -c 250 -M -t 15  -R '@RG\\tID:SHGSOC001N\\tPL:illumina\\tPU:1_20180823_SHGSOC\\tSM:SHGSOC001N' -v 1 /gpfs/igmmfs01/eddie/bioinfsvice/ameynert/software/bcbio-1.0.7/genomes/Hsapiens/hg38/bwa/hg38.fa align_prep/SHGSOC001N_SHGSOC001N_R1.fastq.gz align_prep/SHGSOC001N_SHGSOC001N_R2.fastq.gz | /anaconda/bin/bamsormadup inputformat=sam threads=15 tmpfile=bcbiotx/tmpMwNtCb/SHGSOC001N-sort-sorttmp-markdup SO=coordinate indexfilename=bcbiotx/tmpMwNtCb/SHGSOC001N-sort.bam.bai > bcbiotx/tmpMwNtCb/SHGSOC001N-sort.bam
 
 def samtools_index(infile):
     """

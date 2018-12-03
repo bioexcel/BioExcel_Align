@@ -6,10 +6,10 @@ Genome Variant pipeline, controlling the processes for
 each step.
 """
 
+import sys
 import bioexcel_align.runbwa as rb
 import bioexcel_align.rungatk as rg
 import bioexcel_align.alignutils as au
-import sys
 
 if __name__ == "__main__":
 
