@@ -29,11 +29,11 @@ def baserecal(jopts, threads, ref, infile, knownsites, gatkdir, sample):
     print(command)
     print(cmdargs)
 
-    p = sp.Popen(cmdargs, shell=True, executable='/bin/bash')
+    p = sp.Popen(command, shell=True, executable='/bin/bash')
 
     return p
 
-def applybqsr(jopts, threads, infile, recal, gatkdir, sample):
+def applybqsr(jopts, threads, infile, gatkdir, sample):
     '''
     Create and run command for GATK ApplyBQSRSpark Local mode
     '''
@@ -44,15 +44,14 @@ def applybqsr(jopts, threads, infile, recal, gatkdir, sample):
     --java-options {0} \
     --spark-master local[{1}] \
     -I {2} \
-    --bqsr-recal-file {3} \
-    -O {4}/{5}.final.bam".format(jopts, threads, infile, recal,
-                            gatkdir,  sample))
+    --bqsr-recal-file {4}/{5}.recal.table \
+    -O {4}/{5}.final.bam".format(jopts, threads, infile, gatkdir, sample))
 
     cmdargs = shlex.split(command)
     print(command)
     print(cmdargs)
 
-    p = sp.Popen(cmdargs, shell=True, executable='/bin/bash')
+    p = sp.Popen(command, shell=True, executable='/bin/bash')
 
     return p
 

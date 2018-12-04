@@ -50,9 +50,8 @@ def samtools_index(infile):
     command = str('samtools index {}'.format(infile))
     cmdargs = shlex.split(command)
     print(command)
-    print(cmdargs)
 
-    p = sp.Popen(cmdargs, shell=True, executable='/bin/bash')
+    p = sp.Popen(command, shell=True, executable='/bin/bash')
 
     return p
 
