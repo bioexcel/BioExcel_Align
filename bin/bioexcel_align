@@ -30,13 +30,14 @@ if __name__ == "__main__":
     else: 
         sys.exit('No BWA Mem version selected')
 
-    psamidx = rb.samtools_index('{}.raw.bam'.format(args.sample))
+    psamidx = rb.samtools_index('{0}/{1}.raw.bam'.format(args.bwadir,
+                                                                args.sample))
     psamidx.wait()
 
     pbr = rg.baserecal(args.jvm_opts, args.threads, args.ref, args.files,
                                     args.knownsites, args.gatkdir, args.sample)
     pbr.wait()
 
-    pab = rg.applybqsr(args.jvm_opts, args.threads, args.files, args.recal,
+    pab = rg.applybqsr(args.jvm_opts, args.threads, args.files, 
                                                     args.gatkdir, args.sample)
     pab.wait()

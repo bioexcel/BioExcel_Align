@@ -52,7 +52,7 @@ def samtools_index(infile):
     print(command)
     print(cmdargs)
 
-    p = sp.Popen(cmdargs)
+    p = sp.Popen(cmdargs, shell=True, executable='/bin/bash')
 
     return p
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     else: 
         sys.exit('No BWA Mem version selected')
 
-    psamidx = samtools_index('{}.raw.bam'.format(args.sample))
+    psamidx = samtools_index('{0}/{1}.raw.bam'.format(args.bwadir, args.sample))
     psamidx.wait()
     
     

@@ -29,7 +29,7 @@ def baserecal(jopts, threads, ref, infile, knownsites, gatkdir, sample):
     print(command)
     print(cmdargs)
 
-    p = sp.Popen(cmdargs)
+    p = sp.Popen(cmdargs, shell=True, executable='/bin/bash')
 
     return p
 
@@ -52,7 +52,7 @@ def applybqsr(jopts, threads, infile, recal, gatkdir, sample):
     print(command)
     print(cmdargs)
 
-    p = sp.Popen(cmdargs)
+    p = sp.Popen(cmdargs, shell=True, executable='/bin/bash')
 
     return p
 
