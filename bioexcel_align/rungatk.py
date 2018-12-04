@@ -44,8 +44,8 @@ def applybqsr(jopts, threads, infile, gatkdir, sample):
     --java-options {0} \
     --spark-master local[{1}] \
     -I {2} \
-    --bqsr-recal-file {4}/{5}.recal.table \
-    -O {4}/{5}.final.bam".format(jopts, threads, infile, gatkdir, sample))
+    --bqsr-recal-file {3}/{4}.recal.table \
+    -O {3}/{4}.final.bam".format(jopts, threads, infile, gatkdir, sample))
 
     cmdargs = shlex.split(command)
     print(command)
