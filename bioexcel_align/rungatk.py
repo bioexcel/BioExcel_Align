@@ -17,7 +17,7 @@ def baserecal(jopts, threads, ref, infile, knownsites, gatkdir, sample):
     au.make_paths(gatkdir)
 
     command = str("gatk BaseRecalibratorSpark \
-        --java-options {0} \
+        --java-options '{0}' \
         --spark-master local[{1}] \
         -R {2} \
         -I {3} \
@@ -41,7 +41,7 @@ def applybqsr(jopts, threads, infile, gatkdir, sample):
     au.make_paths(gatkdir)
 
     command = str("gatk ApplyBQSRSpark \
-    --java-options {0} \
+    --java-options '{0}' \
     --spark-master local[{1}] \
     -I {2} \
     --bqsr-recal-file {3}/{4}.recal.table \
@@ -65,7 +65,7 @@ if __name__ == "__main__":
                                         args.knownsites, args.gatkdir, args.sample)
     pbr.wait()
 
-    pab = applybqsr(args.jvm_opts, args.threads, args.files, args.recal, 
+    pab = applybqsr(args.jvm_opts, args.threads, args.files, 
                                                     args.gatkdir, args.sample)
     pab.wait()
     
