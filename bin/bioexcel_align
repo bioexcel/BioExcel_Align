@@ -7,6 +7,7 @@ each step.
 """
 
 import sys
+import shutil
 import bioexcel_align.runbwa as rb
 import bioexcel_align.rungatk as rg
 import bioexcel_align.alignutils as au
@@ -20,12 +21,12 @@ if __name__ == "__main__":
 
     if args.bwa_version == 'stable':
         pbwa = rb.bwamem_stable(args.bwa_ind_ref, args.threads, args.date,
-                                       args.sample, args.files, args.bwadir)
+                                        args.sample, args.files, args.bwadir)
         pbwa.wait()
-    # elif args.bwa_version == 'beta':
-    #     pbwa = bwamem_beta(args.bwa_ind_ref, args.threads, args.date, 
-    #               args.sample, args.fqfiles, args.bwadir)
-    #     pbwa.wait()
+    elif args.bwa_version == 'beta':
+        pbwa = rb.bwamem_beta(args.bwa_ind_ref, args.threads, args.date,
+                                        args.sample, args.files, args.bwadir)
+        pbwa.wait()
 
     else: 
         sys.exit('No BWA Mem version selected')
@@ -44,4 +45,6 @@ if __name__ == "__main__":
                                                     args.gatkdir, args.sample)
     pab.wait()
 
+    shutil.copy('{0}/{1}.final.bam'.format(args.gatkdir, args.sample),
+                        '{0}/{1}.final.bam'.format(args.outdir, args.sample))
     

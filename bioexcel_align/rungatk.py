@@ -25,9 +25,7 @@ def baserecal(jopts, threads, ref, infile, knownsites, gatkdir, sample):
         -O {5}/{6}.recal.table".format(jopts, threads, ref, infile, knownsites,
                             gatkdir, sample))
 
-    cmdargs = shlex.split(command)
     print(command)
-    print(cmdargs)
 
     p = sp.Popen(command, shell=True, executable='/bin/bash')
 
@@ -47,9 +45,7 @@ def applybqsr(jopts, threads, infile, gatkdir, sample):
     --bqsr-recal-file {3}/{4}.recal.table \
     -O {3}/{4}.final.bam".format(jopts, threads, infile, gatkdir, sample))
 
-    cmdargs = shlex.split(command)
     print(command)
-    print(cmdargs)
 
     p = sp.Popen(command, shell=True, executable='/bin/bash')
 
