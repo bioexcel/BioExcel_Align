@@ -37,6 +37,8 @@ def bwamem_beta(bwa_ref, threads, date, sample, fqfiles, bwadir):
     Create and run process for the new implementation of BWA-Mem alignment
     """
     
+    au.make_paths(bwadir)
+
     command = str('bwa mem -R "@RG\\tID:{0}\\tPL:illumina\\tPU:{0}\\tSM:{1}" '
     '-c 250 -M -t {2} {3} {4} | bamsormadup inputformat=sam threads={2} '
     'tmpfile={5}/tmp_{1} SO=coordinate '
