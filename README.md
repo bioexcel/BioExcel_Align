@@ -107,7 +107,7 @@ Our pipeline consists of two main stages: runbwa and rungatk. Each stage exists
 as a python module as shown above. Each module contains specific functions that 
 execute the tools listed. The diagram below shows each of these 
 stages and functions, with colour coding to show which tools
-are used in each module/function. 
+are used in each module/function, as well as useful output files. 
 
 ![alt text](./BioExcel_Align.png "BioExcel_Align workflow")
 
@@ -118,3 +118,13 @@ can be executed from the command line as
 ```bash
 $ python -m bioexcel_align.rungatk <arguments>
 ```
+
+### bwamem_beta
+
+There is also a more recent, but less tested version of the first stage of the 
+pipeline, which replaces samblaster/samtools with the tool bamsormadup 
+(available as part of biobambam2). We recommend using this with caution. IGMM
+partners suggested this change, but we have encountered some errors when testing
+using the [Cirrus](https://cirrus.readthedocs.io/en/latest/) machine as a 
+testbed for our workflows. Further effort will be needed to develop this further
+and better understand the cause of the errors.
