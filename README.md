@@ -59,13 +59,13 @@ the executable script, which runs the whole workflow based on several options
 and arguments the user can modify. Find these using
 
 ```bash
-$ bioexcel_align -h
+$ bxcl_align -h
 ```
 
 An example of basic usage of the pipeline is:
 
 ```bash
-$ bioexcel_align --files in1.fq.gz in2.fq.gz --threads 8 
+$ bxcl_align --files in1.fq.gz in2.fq.gz --threads 8 
 --outdir ./output --sample 'TestAlign' 
 --bwa_ind_ref genomes/Hsapiens/GRCh37/bwa/GRCh37.fa 
 -r genomes/Hsapiens/GRCh37/seq/GRCh37.fa 
