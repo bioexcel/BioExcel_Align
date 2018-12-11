@@ -5,7 +5,6 @@ This script runs GATK BaseRecalibrator and/or ApplyBQSR. The script opens a
 GATK process with the correct parameters.
 """
 
-import shlex
 import subprocess as sp
 import bioexcel_align.alignutils as au
 
@@ -57,11 +56,11 @@ if __name__ == "__main__":
 
     args.files = au.get_files(args)
 
-    pbr = baserecal(args.jvm_opts, args.threads, args.ref, args.files, 
+    pbr = baserecal(args.jvm_opts, args.threads, args.ref, args.files,
                                         args.knownsites, args.gatkdir, args.sample)
     pbr.wait()
 
-    pab = applybqsr(args.jvm_opts, args.threads, args.files, 
+    pab = applybqsr(args.jvm_opts, args.threads, args.files,
                                                     args.gatkdir, args.sample)
     pab.wait()
     

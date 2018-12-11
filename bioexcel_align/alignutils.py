@@ -10,7 +10,6 @@ import sys
 import argparse
 from argparse import HelpFormatter
 from datetime import datetime
-import shutil
 
 class MyFormatter(HelpFormatter):
     """
@@ -45,9 +44,9 @@ class MyFormatter(HelpFormatter):
 
     def _get_default_metavar_for_optional(self, action):
         return action.dest.upper()
-    '''
-    https://stackoverflow.com/questions/32888815/max-help-position-is-not-works-in-python-argparse-library
-    '''
+
+    # https://stackoverflow.com/questions/32888815/max-help-position-is-not-works-in-python-argparse-library
+
     def add_argument(self, action):
         if action.help is not argparse.SUPPRESS:
 
@@ -97,11 +96,11 @@ def parse_command_line(description):
     ####
     bwagroup = parser.add_argument_group('BWA Mem/alignment stage',
         'Additional arguments used when running the BWA stage manually')
-    bwagroup.add_argument("--bwa_version",  default='stable',
+    bwagroup.add_argument("--bwa_version", default='stable',
                             choices=['stable', 'beta'],
                             help="Version of BWA Mem stage to run: Stable "
                             "or more recent, beta version")
-    bwagroup.add_argument("--bwa_ind_ref", 
+    bwagroup.add_argument("--bwa_ind_ref",
                         default='genomes/Hsapiens/GRCh37/bwa/GRCh37.fa',
                         help="Location of the indexed reference genome file "
                         "for use with BWA")
@@ -111,12 +110,12 @@ def parse_command_line(description):
     gatkgroup.add_argument("-j", "--jvm_opts", metavar='J_ARGS', default='',
                 help="Arguments passed to Java when running GATK (e.g. max "
                 "memory, tmpdirs).")
-    gatkgroup.add_argument("-r", "--ref", metavar='FILE', 
+    gatkgroup.add_argument("-r", "--ref", metavar='FILE',
                 default='genomes/Hsapiens/GRCh37/seq/GRCh37.2bit',
-                help="Reference sequence file.")  
-    gatkgroup.add_argument("-k", "--knownsites", metavar='FILE', 
+                help="Reference sequence file.")
+    gatkgroup.add_argument("-k", "--knownsites", metavar='FILE',
                 default='genomes/Hsapiens/GRCh37/variation/dbsnp-147.vcf.gz',
-                help="One or more databases of known polymorphic sites.")              
+                help="One or more databases of known polymorphic sites.")
 
     args = parser.parse_args()
     if not args.files and __name__ != "__main__":
@@ -128,11 +127,11 @@ def parse_command_line(description):
     args.outdir = os.path.abspath(args.outdir)
     args.bwadir = os.path.abspath("{0}/BWA_out".format(args.outdir))
     args.gatkdir = os.path.abspath("{0}/GATK_out".format(args.outdir))
-    
+
     args.date = datetime.now().strftime('%Y_%m_%d')
     args.files = get_files(args.files)
-    if not args.sample: 
-        args.sample=args.date
+    if not args.sample:
+        args.sample = args.date
 
     return args
 
@@ -159,9 +158,9 @@ def get_files(filelist):
     return infiles
 
 if __name__ == "__main__":
-    description = ("This script contains a series of useful functions for the "
+    desc = ("This script contains a series of useful functions for the "
                 "Alignment stage of the BioExcel Cancer Genome Workflow. Run "
                 "to print out example args.")
-    args = parse_command_line(description)
-    print(args)
+    arguments = parse_command_line(desc)
+    print(arguments)
     

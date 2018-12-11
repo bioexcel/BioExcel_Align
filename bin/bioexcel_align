@@ -2,7 +2,7 @@
 
 """
 This script performs the Alignment step of the Cancer
-Genome Variant pipeline, controlling the processes for 
+Genome Variant pipeline, controlling the processes for
 each step.
 """
 
@@ -28,20 +28,20 @@ if __name__ == "__main__":
                                         args.sample, args.files, args.bwadir)
         pbwa.wait()
 
-    else: 
+    else:
         sys.exit('No BWA Mem version selected')
 
     psamidx = rb.samtools_index('{0}/{1}.raw.bam'.format(args.bwadir,
                                                                 args.sample))
     psamidx.wait()
 
-    pbr = rg.baserecal(args.jvm_opts, args.threads, args.ref, 
+    pbr = rg.baserecal(args.jvm_opts, args.threads, args.ref,
                             '{0}/{1}.raw.bam'.format(args.bwadir, args.sample),
                                     args.knownsites, args.gatkdir, args.sample)
     pbr.wait()
 
-    pab = rg.applybqsr(args.jvm_opts, args.threads, 
-                            '{0}/{1}.raw.bam'.format(args.bwadir, args.sample), 
+    pab = rg.applybqsr(args.jvm_opts, args.threads,
+                            '{0}/{1}.raw.bam'.format(args.bwadir, args.sample),
                                                     args.gatkdir, args.sample)
     pab.wait()
 
